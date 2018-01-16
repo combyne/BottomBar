@@ -69,6 +69,8 @@ public class BottomBarTab extends LinearLayout {
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
 
+    private boolean tintIcon = true;
+
     BottomBarTab(Context context) {
         super(context);
 
@@ -187,7 +189,7 @@ public class BottomBarTab extends LinearLayout {
         return (ViewGroup) getParent();
     }
 
-    AppCompatImageView getIconView() {
+    public AppCompatImageView getIconView() {
         return iconView;
     }
 
@@ -286,6 +288,24 @@ public class BottomBarTab extends LinearLayout {
 
     public void setBadgeHidesWhenActive(boolean hideWhenActive) {
         this.badgeHidesWhenActive = hideWhenActive;
+    }
+
+    public boolean isTintIcon() {
+        return tintIcon;
+    }
+
+    public void setTintIcon(boolean tintIcon) {
+        this.tintIcon = tintIcon;
+
+        if (tintIcon) {
+            if (isActive) {
+                setColors(activeColor);
+            } else {
+                setColors(inActiveColor);
+            }
+        } else if (iconView != null) {
+            iconView.clearColorFilter();
+        }
     }
 
     int getCurrentDisplayedIconColor() {
@@ -446,7 +466,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void setColors(int color) {
-        if (iconView != null) {
+        if (tintIcon && iconView != null) {
             iconView.setColorFilter(color);
             iconView.setTag(R.id.bb_bottom_bar_color_id, color);
         }
